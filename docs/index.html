@@ -1,13 +1,130 @@
 <!DOCTYPE html>
-<meta name="viewport" content="user-scalable=0"/>
+<meta name='viewport' content='user-scalable=0' />
 <html>
 <head>
-    <title></title>
-    <script src="https://viewer.marmoset.co/main/marmoset.js"></script>
+  <title></title>
+  <script src='https://viewer.marmoset.co/main/marmoset.js'></script>
+  <script src='lib/jquery.min.js'></script>
+  <script src='lib/bililiteRange.js'></script>
+  <script src='lib/jquery-ui.min.js'></script>
+  <script src='lib/jquery.simulate.js'></script>
+  <script src='lib/jquery.simulate.ext.js'></script>
+  <script src='lib/jquery.simulate.key-combo.js'></script>
+  <script src='lib/jquery.simulate.key-sequence.js'></script>
+  <script src='lib/jquery.simulate.drag-n-drop.js'></script>
 </head>
 <body>
-    <script>
-        marmoset.embed('Screw_Export.mview', { width: 800, height: 600, autoStart: true, fullFrame: true, pagePreset: false });
-    </script>
+  <script>
+      marmoset.embed('Screw_Export.mview', { width: 800, height: 600, autoStart: true, fullFrame: true, pagePreset: false })
+  </script>
+  <style>
+    
+    @keyframes pulse {
+      0% {
+        transform: scale(0.8);
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+      }
+      70% {
+        transform: scale(1.1);
+        box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+      }
+      100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+      }
+    }
+
+    #container {
+      position: absolute;
+      bottom: 15vh;
+      left: 47vw;
+    }
+
+    #point {
+      width: 0.8vw;
+      height: 0.8vw;
+      border-radius: 1vw;
+      background: rgba(255,255,255,1);
+      animation: pulse 2s infinite;
+    }
+
+    #line {
+      height: 1px;
+      transition: all 1s ease-in-out;
+      background: rgba(255,255,255,0.65);
+      width: 0;
+      position: absolute;
+      top: 0.4vw;
+      left: 0.4vw;
+    }
+
+    #popup {
+      background: rgba(255,255,255,0.2);
+      width: 200px;
+      border: 1px solid gray;
+      padding: 1rem;
+      color: white;
+      border-radius: 8px;
+      position: absolute;
+      left: -10vw;
+      transition: all 500ms ease-in-out;
+      transform: translateY(calc(-50% + 1px)) scaleY(0);
+    }
+    
+    .popup-active {
+      transform: translateY(calc(-100% + 1px)) scaleY(1) !important;
+    }
+    
+    .line-active {
+      width: 15vw !important;
+      left: -15vw !important;
+    }
+
+    #rotate {
+      background: rgba(255,255,255,0.2);
+      border: 1px solid gray;
+      padding: 1rem;
+      color: white;
+      border-radius: 8px;
+      position: absolute;
+      right: 25vw;
+      bottom: 15vh;
+      cursor: pointer;
+    }
+    
+  </style>
+  <div class='overlay'>
+    <div id='container'>
+      <div id='point'></div>
+      <div id='line'>
+        <div id='popup'>New trending thread</div>
+      </div>
+    </div>
+    <div id='rotate'>Rotate</div>
+  </div>
+  <script>
+    
+      function animate() {
+        const line = document.querySelector('#line')
+        const popup = document.querySelector('#popup')
+        
+        if (line.classList.contains('line-active')) {
+          popup.classList.remove('popup-active')
+          setTimeout(() => line.classList.remove('line-active'), 400)
+        } else {
+          line.classList.add('line-active')
+          setTimeout(() => popup.classList.add('popup-active'), 500)
+        }
+      }
+      
+      $('#rotate').click(function() {
+        $('#marmosetUI').simulate("drag-n-drop", {dx: 300, interpolation: {stepWidth: 10, stepDelay: 50}});
+      });
+
+      const point = document.querySelector('#point')
+      point.addEventListener('click', animate)
+
+  </script>
+  
 </body>
 </html>
